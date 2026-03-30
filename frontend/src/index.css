@@ -1,0 +1,127 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #07090f;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #0d1117;
+  border-right: 1px solid #1e2d3d;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.main-content {
+  padding: 28px;
+  overflow-y: auto;
+}
+
+.card {
+  background: #0d1117;
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #07090f;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #0d1117;
+  border-right: 1px solid #1e2d3d;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.main-content {
+  padding: 28px;
+  overflow-y: auto;
+}
+
+.card {
+  background: #0d1117;
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.btn-primary:hover { background: #1d4ed8; }
+.btn-primary:disabled { background: #1e2d3d; color: #475569; cursor: not-allowed; }
+
+.input-field {
+  width: 100%;
+  background: #070c18;
+  border: 1.5px solid #1e2d3d;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #e2e8f0;
+  outline: none;
+  margin-top: 6px;
+}
+
+.input-field:focus { border-color: #2563eb; }
+
+.error-msg {
+  background: #1a0505;
+  border: 1px solid #7f1d1d;
+  color: #fca5a5;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.page-title { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+.page-sub   { font-size: 13px; color: #475569; margin-top: 4px; }
+.label      { font-size: 11px; font-weight: 600; color: #475569;
+              text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+}

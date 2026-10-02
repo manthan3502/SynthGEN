@@ -5,25 +5,30 @@ import Sidebar from '../components/Sidebar'
 function History() {
   const [items,   setItems]   = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  useEffect(() => { fetchHistory() }, [])
-
-  const fetchHistory = async () => {
-    try {
-      const res = await getHistory()
-      setItems(res.data)
-    } catch {
-      setItems([])
-    } finally {
-      setLoading(false)
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const res = await getHistory()
+        setItems(res.data)
+      } catch {
+        setError('Could not load generation history.')
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    fetchHistory()
+  }, [])
 
   const remove = async (id) => {
     try {
       await deleteHistory(id)
-      setItems(items.filter(i => i.id !== id))
-    } catch {}
+      setItems(current => current.filter(i => i.id !== id))
+      setError('')
+    } catch {
+      setError('Could not delete this history item.')
+    }
   }
 
   return (
@@ -32,9 +37,10 @@ function History() {
       <div className='main-content'>
         <div style={{marginBottom:24}}>
           <div className='page-title'>Generation History</div>
-          <div className='page-sub'>All your past datasets — re-download anytime</div>
+          <div className='page-sub'>Review and delete your generation history</div>
         </div>
 
+        {error && <div className='error-msg'>{error}</div>}
         <div className='card'>
           <div className='label'>Recent generations ({items.length})</div>
           {loading && <div style={{color:'#475569',fontSize:13,padding:20,textAlign:'center'}}>Loading...</div>}

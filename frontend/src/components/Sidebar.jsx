@@ -25,7 +25,7 @@ function Sidebar() {
             ⚡
           </div>
           <div>
-            <div style={{fontSize:15,fontWeight:700,color:'#f1f5f9'}}>DataForge</div>
+            <div style={{fontSize:15,fontWeight:700,color:'#f1f5f9'}}>SynthGEN</div>
             <div style={{fontSize:10,color:'#475569'}}>Synthetic Data Generator</div>
           </div>
         </div>

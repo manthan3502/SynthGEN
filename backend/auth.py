@@ -1,46 +1,56 @@
-from flask import Blueprint, request, jsonify
-from werkzeug.security import generate_password_hash, check_password_hash
+import re
+
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
-from database import db, User
+from sqlalchemy.exc import IntegrityError
+from werkzeug.security import check_password_hash, generate_password_hash
 
-auth = Blueprint('auth', __name__)
+from database import User, db
 
-# ── REGISTER ──────────────────────────────────────────
-@auth.route('/api/register', methods=['POST'])
+
+auth = Blueprint("auth", __name__)
+
+
+def valid_email(email):
+    return isinstance(email, str) and len(email.strip()) <= 120 and bool(
+        re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", email.strip())
+    )
+
+
+@auth.route("/api/register", methods=["POST"])
 def register():
-    data     = request.json
-    name     = data.get('name')
-    email    = data.get('email')
-    password = data.get('password')
-
-    if not name or not email or not password:
-        return jsonify({'error': 'All fields are required'}), 400
-
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return jsonify(error="A JSON object is required"), 400
+    name, email, password = data.get("name"), data.get("email"), data.get("password")
+    if not isinstance(name, str) or not name.strip() or len(name.strip()) > 100:
+        return jsonify(error="A valid name is required"), 400
+    if not valid_email(email):
+        return jsonify(error="A valid email is required"), 400
+    if not isinstance(password, str) or not password.strip() or len(password) > 1024:
+        return jsonify(error="A password is required (maximum 1024 characters)"), 400
+    email = email.strip().lower()
     if User.query.filter_by(email=email).first():
-        return jsonify({'error': 'Email already exists'}), 400
-
-    hashed = generate_password_hash(password)
-    user   = User(name=name, email=email, password=hashed)
+        return jsonify(error="Email already exists"), 400
+    user = User(name=name.strip(), email=email, password=generate_password_hash(password))
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify(error="Email already exists"), 400
+    return jsonify(message="Account created successfully"), 201
 
-    return jsonify({'message': 'Account created successfully'}), 201
 
-# ── LOGIN ─────────────────────────────────────────────
-@auth.route('/api/login', methods=['POST'])
+@auth.route("/api/login", methods=["POST"])
 def login():
-    data     = request.json
-    email    = data.get('email')
-    password = data.get('password')
-
-    user = User.query.filter_by(email=email).first()
-
-    if not user or not check_password_hash(user.password, password):
-        return jsonify({'error': 'Invalid email or password'}), 401
-
-    token = create_access_token(identity=str(user.id))
-    return jsonify({
-        'token': token,
-        'name':  user.name,
-        'email': user.email
-    }), 200
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return jsonify(error="A JSON object is required"), 400
+    email, password = data.get("email"), data.get("password")
+    if not valid_email(email) or not isinstance(password, str) or len(password) > 1024:
+        return jsonify(error="Invalid email or password"), 401
+    user = User.query.filter_by(email=email.strip().lower()).first()
+    if user is None or not check_password_hash(user.password, password):
+        return jsonify(error="Invalid email or password"), 401
+    return jsonify(token=create_access_token(identity=str(user.id)), name=user.name, email=user.email)

@@ -64,7 +64,7 @@ function Settings() {
             <div style={{display:'flex',alignItems:'center',gap:8,fontSize:13,
               color:'#4ade80',background:'#05140d',border:'1px solid #14532d',
               borderRadius:8,padding:'10px 14px',marginTop:4}}>
-              ✓ Gemini 1.5 Flash connected · Free tier · 1500 req/day
+              Gemini 2.5 Flash · Availability depends on API configuration
             </div>
           </div>
         </div>

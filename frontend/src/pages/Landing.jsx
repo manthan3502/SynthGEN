@@ -14,21 +14,21 @@ function Landing() {
           ⚡
         </div>
         <h1 style={{fontSize:48,fontWeight:800,color:'#f1f5f9',marginBottom:12}}>
-          SynthGen
+          SynthGEN
         </h1>
         <h2 style={{fontSize:22,fontWeight:500,color:'#60a5fa',marginBottom:16}}>
           Synthetic Data Generator
         </h2>
         <p style={{fontSize:16,color:'#64748b',marginBottom:40,lineHeight:1.7}}>
           Can't find the dataset you need on Kaggle?<br/>
-          Describe it in plain English — Gemini AI generates it instantly.
+          Describe it in plain English — Gemini proposes a schema; Faker generates the records.
         </p>
 
         <div style={{display:'flex',gap:12,justifyContent:'center',marginBottom:48}}>
           <button onClick={() => navigate('/register')}
             style={{background:'#2563eb',color:'#fff',border:'none',
               padding:'12px 28px',borderRadius:9,fontSize:15,fontWeight:600,cursor:'pointer'}}>
-            Get Started — Free
+            Get Started
           </button>
           <button onClick={() => navigate('/login')}
             style={{background:'transparent',color:'#60a5fa',
@@ -40,9 +40,9 @@ function Landing() {
 
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
           {[
-            {icon:'🤖',title:'AI Powered',desc:'Gemini AI understands any dataset description you type'},
-            {icon:'📊',title:'Any Dataset',desc:'Tabular data, AQI, IPL, hospitals, stocks — anything'},
-            {icon:'💰',title:'100% Free',desc:'No credit card, no paid API — completely free to use'},
+            {icon:'🤖',title:'AI Powered',desc:'Gemini proposes columns from your description'},
+            {icon:'📊',title:'Tabular Data',desc:'Generate example records for testing and exploration'},
+            {icon:'💰',title:'CSV Export',desc:'Download generated records as a CSV file'},
           ].map((f,i) => (
             <div key={i} style={{background:'#0d1117',border:'1px solid #1e2d3d',
               borderRadius:12,padding:'20px 16px',textAlign:'center'}}>

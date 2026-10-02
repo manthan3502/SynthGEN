@@ -1,19 +1,22 @@
-import google.generativeai as genai
 from faker import Faker
 import pandas as pd
 import random
 import json
 import re
 import os
-from dotenv import load_dotenv
+import math
 
-load_dotenv()
-genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-model = genai.GenerativeModel('gemini-2.5-flash')
 fake  = Faker('en_IN')
 
 # ── STEP 1: Ask Gemini to understand the prompt ───────
 def get_schema(prompt):
+    api_key = os.getenv('GEMINI_API_KEY')
+    if not api_key:
+        raise RuntimeError('Gemini is not configured')
+    # Lazy configuration keeps imports and mocked tests independent of credentials.
+    import google.generativeai as genai
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel('gemini-2.5-flash')
     system = '''
 You are a dataset schema generator.
 Return ONLY a valid JSON object. No explanation. No markdown. Just pure JSON.
@@ -72,10 +75,44 @@ def generate_value(col):
 # ── STEP 3: Generate full dataset ─────────────────────
 def generate_dataset(prompt, rows):
     schema  = get_schema(prompt)
-    columns = schema['columns']
+    columns = validate_schema(schema)
     data    = []
     for _ in range(rows):
         row = {col['name']: generate_value(col) for col in columns}
         data.append(row)
     df = pd.DataFrame(data)
     return df, columns
+
+
+def validate_schema(schema):
+    """Treat provider output as untrusted input before building records."""
+    columns = schema.get('columns') if isinstance(schema, dict) else None
+    if not isinstance(columns, list) or not 1 <= len(columns) <= 100:
+        raise ValueError('Invalid dataset schema')
+    allowed = {'name', 'integer', 'float', 'date', 'email', 'phone', 'city',
+               'state', 'country', 'address', 'company', 'text', 'boolean', 'uuid', 'choice'}
+    names = set()
+    for col in columns:
+        if not isinstance(col, dict):
+            raise ValueError('Invalid column')
+        name = col.get('name')
+        if not isinstance(name, str) or not re.fullmatch(r'[a-z][a-z0-9_]{0,99}', name) or name in names:
+            raise ValueError('Invalid column name')
+        names.add(name)
+        kind = col.get('type')
+        if kind not in allowed:
+            raise ValueError('Invalid column type')
+        if kind in {'integer', 'float'}:
+            low, high = col.get('min', 1 if kind == 'integer' else 0.0), col.get('max', 100)
+            if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)
+                   for v in (low, high)) or low > high:
+                raise ValueError('Invalid numeric bounds')
+            if kind == 'integer' and any(not isinstance(v, int) for v in (low, high)):
+                raise ValueError('Invalid integer bounds')
+        if kind == 'choice':
+            values = col.get('values')
+            if not isinstance(values, list) or not values or any(
+                not isinstance(v, (str, int, float, bool)) for v in values
+            ):
+                raise ValueError('Invalid choices')
+    return columns

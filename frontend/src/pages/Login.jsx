@@ -33,7 +33,7 @@ function Login() {
         <div style={{textAlign:'center',marginBottom:32}}>
           <div style={{fontSize:28,marginBottom:8}}>⚡</div>
           <h1 style={{fontSize:24,fontWeight:700,color:'#f1f5f9'}}>Welcome back</h1>
-          <p style={{fontSize:13,color:'#475569',marginTop:6}}>Login to your DataForge account</p>
+          <p style={{fontSize:13,color:'#475569',marginTop:6}}>Login to your SynthGEN account</p>
         </div>
 
         <div className='card'>

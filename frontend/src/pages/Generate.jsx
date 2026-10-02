@@ -192,8 +192,8 @@ function Generate() {
                 {[
                   {val:preview?.rows||'—',lbl:'Rows',color:'#60a5fa'},
                   {val:preview?.columns?.length||'—',lbl:'Columns',color:'#4ade80'},
-                  {val:totalGen,lbl:'Today',color:'#f472b6'},
-                  {val:'Rs.0',lbl:'Cost',color:'#fb923c'},
+                  {val:totalGen,lbl:'This visit',color:'#f472b6'},
+                  {val:'CSV',lbl:'Export',color:'#fb923c'},
                 ].map((s,i) => (
                   <div key={i} style={{background:'#111827',borderRadius:9,
                     padding:'13px 14px',border:'1px solid #1e2d3d'}}>

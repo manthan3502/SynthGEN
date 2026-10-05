@@ -25,6 +25,26 @@ SynthGEN is built for local use, prototyping, and experimentation.
 
 ---
 
+## Screenshots
+
+### Dataset Generation
+
+<p align="center">
+  <img src="docs/screenshots/synthgen-generate-form.jpg" alt="SynthGEN dataset generation request form" width="100%">
+</p>
+
+### Landing Page
+
+<p align="center">
+  <img src="docs/screenshots/synthgen-landing.jpg" alt="SynthGEN landing page" width="85%">
+</p>
+
+Captured from the running local application. The Generate screenshot shows the
+request form before submission; it does not show a generated dataset or a live
+Gemini response.
+
+---
+
 ## The Problem
 
 Developers and analysts often need structured sample data for prototyping, testing, demonstrations, and interface development.
